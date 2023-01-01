@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    <title>Home</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        
+        html,body{
+            width: 100%;
+            height: 100%;
+        }
+        #main{
+            width: 100%;
+            height: 100%;
+            /* background-color: red; */
+        }
+        #nav{
+            width: 100%;
+            height: 50px;
+            background-color: rgb(1, 1, 69);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+            font-family: Dosis;
+            padding: 0px 30px;
+            position: relative;
+        }
+        #nav img{
+            width: 10%;
+        }
+        #icon{
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            height: 100%;
+        }
+        #icon h5:nth-child(2){
+            margin-left: 10px;
+        }
+        #rhtnav{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        #card-ctn{
+            display: grid;
+            grid-template-columns: auto auto auto;
+            row-gap: 20px;
+        }
+        #icon h5{
+            font-size: 15px;
+        }
+        #icon i{
+            font-size: 20px;
+        }
+        #icondiv{
+            text-decoration: none;
+            color: white;
+            border: 1px solid transparent;
+            margin-left: 20px;
+            padding: 0px 5px;
+        }
+        #icondiv:hover{
+            border: 1px solid white;
+        }
+        #logout{
+            padding: 3px;
+            background-color: rgb(1, 1, 69);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            position: absolute;
+            right: 30px;
+            bottom: -40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .quickSearch{
+            background-color: red;
+            width: 30%;
+            position: relative;
+        }
+        #nav input{
+            width: 100%;
+            height: 35px;
+            padding: 15px;
+        }
+        #searches{
+            position: absolute;
+            z-index: 99999;
+            color: black;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.541);
+            transition: all cubic-bezier(0.19, 1, 0.22, 1) .3s;
+            z-index: 2;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        #searches h3{
+            font-family: Dosis;
+            font-weight: 500;
+            font-size: 18px;
+            margin-left: 15px;
+            color: rgb(65, 63, 63);
+            transition: all cubic-bezier(0.19, 1, 0.22, 1) .3s;
+        }
+        .incart{
+            background-color: rgb(255, 200, 0);
+            color: black;
+            border: none;
+        }
+        .incart:hover{
+            background-color: rgb(255, 174, 0);
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <div id="main">
+        <div id="nav">
+            <img src="/images/logo.png" alt="">
+            <div class="quickSearch">
+                <input id="searchItems" placeholder="Search Items" type="text">
+                <div id="searches">
+                    
+                </div>
+            </div>
+            <div id="rhtnav">
+                <h4>Hello <%=LoggedInUser.username%></h4>
+                <a id="icondiv" href="/cart">
+                    <div id="icon">
+                        <h4><%=LoggedInUser.cart.length%></h4>
+                        <h5>Cart</h5>
+                        <i class="ri-shopping-cart-2-fill"></i>
+                    </div>
+                </a>
+            <a href="/logout" id="logout" class="btn btn-primary"><i class="ri-shut-down-line"></i></a>
+            </div>
+        </div>
+        <div class="container mt-4">
+            <div id="card-ctn">
+                <% allItems.forEach(function(eachItem){ %>
+                    <div class="card" style="width: 18rem;">
+                        <a class="text-center" href="/item/<%=eachItem._id%>">
+                            <img style="height: 286px; width: fit-content;" src="<%=eachItem.itemImg%>" class="card-img-top mx-auto" alt="...">
+                        </a>
+                        <div class="card-body">
+                          <h5 class="card-title"><%=eachItem.itemName%></h5>
+                          <p class="card-text"><%=eachItem.itemDes%></p>
+                          <h4>₹ <%=eachItem.itemPrice%>.00/-</h4>
+                          <!-- <a href="/add/<%=eachItem._id%>" class="btn btn-primary"><%= LoggedInUser.cart.indexOf(eachItem._id) === -1 ? 'Add to Cart' : 'Remove from Cart' %></a> -->
+                          <% if(LoggedInUser.cart.indexOf(eachItem._id) === -1){ %>
+                            <a href="/add/<%=eachItem._id%>" class="btn btn-primary">Add to Cart</a>
+                          <% } else{ %>
+                            <div>
+                                <a href="/add/<%=eachItem._id%>" class="incart btn btn-primary">Add to Cart</a>
+                                <a href="/cart" class="btn btn-primary">Go to Cart</a>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <pre class="mt-3">Already in cart</pre>
+                                <pre class="mt-3">QTY: <%=eachItem.qty%></pre>
+                            </div>
+                          <% } %>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js" integrity="sha512-odNmoc1XJy5x1TMVMdC7EMs3IVdItLPlCeL5vSUPN2llYKMJ2eByTTAIiiuqLg+GdNr9hF6z81p27DArRFKT7A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        var input = document.querySelector('#searchItems');
+        var searches = document.querySelector('#searches');
+        var result;
+        input.addEventListener('input',function(){
+            if(this.value.length > 0){
+                axios.get(`/check/${this.value}`)
+                    .then(function(response){
+                    result = response.data.map(a => a)
+                    if(result.length !== 0){
+                        var clutter = '';
+                        result.forEach((elem,index)=>{
+                        clutter += `<a class="text-decoration-none" href="/item/${elem._id}"><h3 id="${index}">${elem.itemName}</h3></a>`
+                        })
+                        searches.innerHTML = clutter;
+                    }
+                    else{
+                        searches.innerHTML = ''
+                    }
+                    // console.log(response)
+                })
+            }
+            else{
+                searches.innerHTML = ''
+            }
+        })
+    </script>
+</body>
+</html>
